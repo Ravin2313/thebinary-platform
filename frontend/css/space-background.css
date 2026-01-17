@@ -1,0 +1,545 @@
+/* ============================================
+   SPACE BACKGROUND WITH STARS & METEORS
+   ============================================ */
+
+.space-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0 !important;
+    background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+    overflow: hidden;
+    pointer-events: none !important;
+}
+
+/* Make sure all space elements stay in background */
+.space-bg,
+.space-bg *,
+.stars,
+.stars *,
+.meteor,
+.planet,
+.nebula,
+.comet,
+.galaxy,
+.aurora,
+.milky-way {
+    pointer-events: none !important;
+    z-index: 0 !important;
+}
+
+/* Ensure ALL content is above space background but below mobile menu */
+body > *:not(.space-bg):not(.nav-overlay):not(.nav-links) {
+    position: relative;
+    z-index: 1;
+}
+
+header,
+nav,
+.navbar,
+main,
+section,
+footer,
+.container,
+.hero,
+.card,
+.project-card,
+.detail-section,
+.auth-card,
+.admin-section {
+    position: relative;
+    z-index: 10 !important;
+}
+
+/* Mobile menu should be above everything */
+.nav-links,
+.nav-overlay,
+.hamburger {
+    z-index: 99999 !important;
+}
+
+/* Ensure interactive elements work properly */
+input, textarea, select, button, a, .btn, .card {
+    pointer-events: auto !important;
+    position: relative;
+    z-index: 10;
+}
+    z-index: 10;
+}
+
+/* ============================================
+   TWINKLING STARS (Multiple Layers)
+   ============================================ */
+
+.stars {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+/* Small Stars */
+.stars-small {
+    width: 1px;
+    height: 1px;
+    background: transparent;
+    box-shadow: 
+        1780px 1158px #FFF, 1819px 1331px #FFF, 1958px 1700px #FFF, 
+        1132px 1185px #FFF, 1994px 1045px #FFF, 1698px 1414px #FFF,
+        1480px 1814px #FFF, 1176px 1032px #FFF, 1042px 1729px #FFF,
+        1568px 1875px #FFF, 1305px 1474px #FFF, 1863px 1032px #FFF,
+        1045px 1447px #FFF, 1473px 1032px #FFF, 1875px 1658px #FFF,
+        1200px 900px #FFF, 1600px 1200px #FFF, 800px 600px #FFF,
+        400px 1400px #FFF, 1900px 400px #FFF, 300px 1800px #FFF,
+        1700px 200px #FFF, 500px 1000px #FFF, 1300px 1600px #FFF,
+        900px 300px #FFF, 1100px 1900px #FFF, 700px 1500px #FFF,
+        1500px 700px #FFF, 200px 1200px #FFF, 1800px 800px #FFF,
+        600px 400px #FFF, 1400px 1100px #FFF, 1000px 1700px #FFF,
+        100px 500px #FFF, 1600px 300px #FFF, 800px 1300px #FFF,
+        1200px 100px #FFF, 400px 900px #FFF, 1900px 1500px #FFF,
+        300px 700px #FFF, 1700px 1900px #FFF, 500px 1100px #FFF,
+        1300px 500px #FFF, 900px 1600px #FFF, 1100px 200px #FFF,
+        700px 800px #FFF, 1500px 1400px #FFF, 200px 1000px #FFF,
+        1800px 600px #FFF, 600px 1800px #FFF, 1400px 900px #FFF,
+        1000px 100px #FFF, 100px 1300px #FFF, 1600px 1700px #FFF,
+        800px 500px #FFF, 1200px 1900px #FFF, 400px 300px #FFF;
+    animation: twinkle 3s infinite;
+}
+
+/* Medium Stars */
+.stars-medium {
+    width: 2px;
+    height: 2px;
+    background: transparent;
+    box-shadow: 
+        779px 1331px #FFF, 324px 1500px #FFF, 1845px 1684px #FFF,
+        1632px 1115px #FFF, 1994px 1845px #FFF, 1698px 914px #FFF,
+        1480px 1614px #FFF, 1176px 1632px #FFF, 1042px 1529px #FFF,
+        1568px 1375px #FFF, 1305px 1774px #FFF, 1863px 1232px #FFF,
+        1045px 1947px #FFF, 1473px 1832px #FFF, 1875px 1158px #FFF,
+        450px 1200px #FFF, 1750px 950px #FFF, 650px 1450px #FFF,
+        1850px 350px #FFF, 250px 1650px #FFF, 1550px 550px #FFF,
+        850px 1750px #FFF, 1350px 150px #FFF, 550px 1350px #FFF,
+        1650px 1550px #FFF, 350px 750px #FFF, 1950px 1150px #FFF,
+        750px 350px #FFF, 1150px 1950px #FFF, 950px 1750px #FFF;
+    animation: twinkle 4s infinite;
+}
+
+/* Large Stars */
+.stars-large {
+    width: 3px;
+    height: 3px;
+    background: transparent;
+    box-shadow: 
+        1779px 331px #FFF, 324px 500px #FFF, 845px 684px #FFF,
+        632px 115px #FFF, 994px 845px #FFF, 698px 914px #FFF,
+        480px 614px #FFF, 176px 632px #FFF, 1042px 529px #FFF,
+        568px 375px #FFF, 305px 774px #FFF, 863px 232px #FFF,
+        1045px 947px #FFF, 473px 832px #FFF, 875px 158px #FFF,
+        1200px 400px #FFF, 400px 1600px #FFF, 1600px 800px #FFF,
+        800px 1200px #FFF, 1400px 600px #FFF, 600px 1800px #FFF;
+    animation: twinkle 5s infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+
+/* ============================================
+   SHOOTING STARS / METEORS
+   ============================================ */
+
+.meteor {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: linear-gradient(90deg, #fff, transparent);
+    border-radius: 50%;
+    box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
+    animation: meteor-fall linear infinite;
+    opacity: 0;
+}
+
+/* Multiple meteors with different timings */
+.meteor:nth-child(1) {
+    top: 10%;
+    left: 20%;
+    animation-duration: 3s;
+    animation-delay: 0s;
+}
+
+.meteor:nth-child(2) {
+    top: 5%;
+    left: 60%;
+    animation-duration: 2.5s;
+    animation-delay: 1s;
+}
+
+.meteor:nth-child(3) {
+    top: 15%;
+    left: 80%;
+    animation-duration: 3.5s;
+    animation-delay: 2s;
+}
+
+.meteor:nth-child(4) {
+    top: 8%;
+    left: 40%;
+    animation-duration: 2.8s;
+    animation-delay: 3s;
+}
+
+.meteor:nth-child(5) {
+    top: 12%;
+    left: 90%;
+    animation-duration: 3.2s;
+    animation-delay: 4s;
+}
+
+.meteor:nth-child(6) {
+    top: 20%;
+    left: 30%;
+    animation-duration: 2.6s;
+    animation-delay: 5s;
+}
+
+.meteor:nth-child(7) {
+    top: 3%;
+    left: 70%;
+    animation-duration: 3.8s;
+    animation-delay: 6s;
+}
+
+.meteor:nth-child(8) {
+    top: 18%;
+    left: 50%;
+    animation-duration: 2.9s;
+    animation-delay: 7s;
+}
+
+@keyframes meteor-fall {
+    0% {
+        transform: translate(0, 0) rotate(-45deg);
+        opacity: 1;
+        width: 2px;
+        height: 80px;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        transform: translate(300px, 300px) rotate(-45deg);
+        opacity: 0;
+        width: 2px;
+        height: 80px;
+    }
+}
+
+/* ============================================
+   PLANETS & CELESTIAL OBJECTS
+   ============================================ */
+
+.planet {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.6;
+    animation: float 20s ease-in-out infinite;
+}
+
+.planet-1 {
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle at 30% 30%, #4a90e2, #2c5aa0);
+    top: 15%;
+    right: 10%;
+    box-shadow: 0 0 40px rgba(74, 144, 226, 0.5);
+}
+
+.planet-2 {
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle at 30% 30%, #e24a4a, #a02c2c);
+    bottom: 20%;
+    left: 15%;
+    box-shadow: 0 0 30px rgba(226, 74, 74, 0.5);
+    animation-delay: -5s;
+}
+
+.planet-3 {
+    width: 40px;
+    height: 40px;
+    background: radial-gradient(circle at 30% 30%, #e2d24a, #a09a2c);
+    top: 40%;
+    left: 5%;
+    box-shadow: 0 0 20px rgba(226, 210, 74, 0.5);
+    animation-delay: -10s;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0) translateX(0);
+    }
+    25% {
+        transform: translateY(-20px) translateX(10px);
+    }
+    50% {
+        transform: translateY(0) translateX(20px);
+    }
+    75% {
+        transform: translateY(20px) translateX(10px);
+    }
+}
+
+/* ============================================
+   NEBULA CLOUDS
+   ============================================ */
+
+.nebula {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.15;
+    animation: nebula-move 30s ease-in-out infinite;
+}
+
+.nebula-1 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, #667eea, transparent);
+    top: 10%;
+    left: 20%;
+}
+
+.nebula-2 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, #764ba2, transparent);
+    bottom: 10%;
+    right: 20%;
+    animation-delay: -10s;
+}
+
+.nebula-3 {
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, #f093fb, transparent);
+    top: 50%;
+    left: 50%;
+    animation-delay: -20s;
+}
+
+@keyframes nebula-move {
+    0%, 100% {
+        transform: translate(0, 0) scale(1);
+    }
+    33% {
+        transform: translate(50px, -30px) scale(1.1);
+    }
+    66% {
+        transform: translate(-30px, 50px) scale(0.9);
+    }
+}
+
+/* ============================================
+   MILKY WAY EFFECT
+   ============================================ */
+
+.milky-way {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    top: -50%;
+    left: -50%;
+    background: 
+        radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+        radial-gradient(ellipse at 30% 40%, rgba(102, 126, 234, 0.03) 0%, transparent 40%),
+        radial-gradient(ellipse at 70% 60%, rgba(118, 75, 162, 0.03) 0%, transparent 40%);
+    animation: milky-way-rotate 120s linear infinite;
+}
+
+@keyframes milky-way-rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ============================================
+   CONSTELLATION LINES
+   ============================================ */
+
+.constellation {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0.2;
+}
+
+.constellation-line {
+    position: absolute;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #fff, transparent);
+    transform-origin: left center;
+    animation: constellation-glow 4s ease-in-out infinite;
+}
+
+@keyframes constellation-glow {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 0.6; }
+}
+
+/* ============================================
+   AURORA EFFECT
+   ============================================ */
+
+.aurora {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: 
+        linear-gradient(180deg, 
+            transparent 0%, 
+            rgba(102, 126, 234, 0.05) 30%, 
+            rgba(118, 75, 162, 0.05) 60%, 
+            transparent 100%);
+    animation: aurora-wave 15s ease-in-out infinite;
+}
+
+@keyframes aurora-wave {
+    0%, 100% {
+        transform: translateY(0) scaleY(1);
+        opacity: 0.3;
+    }
+    50% {
+        transform: translateY(-50px) scaleY(1.1);
+        opacity: 0.6;
+    }
+}
+
+/* ============================================
+   DISTANT GALAXIES
+   ============================================ */
+
+.galaxy {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.8), transparent);
+    box-shadow: 
+        0 0 10px 2px rgba(255, 255, 255, 0.3),
+        0 0 20px 4px rgba(102, 126, 234, 0.2);
+    animation: galaxy-pulse 6s ease-in-out infinite;
+}
+
+@keyframes galaxy-pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+    50% {
+        transform: scale(1.5);
+        opacity: 1;
+    }
+}
+
+/* ============================================
+   COMET TRAIL
+   ============================================ */
+
+.comet {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 
+        0 0 10px 2px rgba(255, 255, 255, 0.8),
+        0 0 20px 4px rgba(102, 126, 234, 0.6);
+    animation: comet-path 8s linear infinite;
+    opacity: 0;
+}
+
+@keyframes comet-path {
+    0% {
+        transform: translate(0, 0) rotate(-45deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translate(800px, 800px) rotate(-45deg);
+        opacity: 0;
+    }
+}
+
+/* Position comets */
+.comet:nth-child(1) {
+    top: 5%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.comet:nth-child(2) {
+    top: 15%;
+    left: 70%;
+    animation-delay: 3s;
+}
+
+.comet:nth-child(3) {
+    top: 25%;
+    left: 40%;
+    animation-delay: 6s;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+    .planet {
+        display: none; /* Hide planets on mobile for performance */
+    }
+    
+    .nebula {
+        filter: blur(40px);
+        opacity: 0.05; /* Reduce nebula opacity even more */
+    }
+    
+    .meteor {
+        display: none; /* Reduce meteors on mobile */
+    }
+    
+    .meteor:nth-child(1),
+    .meteor:nth-child(2),
+    .meteor:nth-child(3) {
+        display: block; /* Keep only 3 meteors */
+    }
+    
+    /* Lighten space background on mobile */
+    .space-bg {
+        background: radial-gradient(ellipse at bottom, #1B2735 0%, #0a0e1a 100%);
+        opacity: 0.95;
+    }
+    
+    /* Reduce aurora effect */
+    .aurora {
+        opacity: 0.1;
+    }
+    
+    /* Simplify milky way */
+    .milky-way {
+        opacity: 0.3;
+    }
+}

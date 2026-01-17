@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Contacts - TheBinary Admin</title>
+    <link rel="stylesheet" href="../css/modern-theme.css">
+    <link rel="stylesheet" href="../css/space-background.css">
+    <link rel="stylesheet" href="../css/admin-panel.css">
+</head>
+<body>
+    <!-- Space Background -->
+    <div class="space-bg"></div>
+    
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" onclick="toggleSidebar()">☰</button>
+    
+    <div class="admin-layout">
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="admin-logo">
+                <h2>⚡ Admin Panel</h2>
+            </div>
+            <nav class="admin-nav">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="manage-projects.html">Manage Projects</a>
+                <a href="manage-users.html">Manage Users</a>
+                <a href="manage-contacts.html" class="active">Manage Contacts</a>
+                <a href="manage-reviews.html">Manage Reviews</a>
+                <a href="analytics.html">Analytics</a>
+                <a href="settings.html">Settings</a>
+                <a href="#" onclick="logout()">Logout</a>
+            </nav>
+        </aside>
+        
+        <main class="admin-main">
+            <header class="admin-header">
+                <h1>💬 Manage Contacts</h1>
+            </header>
+            
+            <div class="admin-content">
+                <!-- Filter Tabs -->
+                <div class="admin-section">
+                    <div class="filter-tabs">
+                        <button class="tab-btn active" onclick="filterContacts('all')">
+                            All (<span id="allCount">0</span>)
+                        </button>
+                        <button class="tab-btn" onclick="filterContacts('New')">
+                            New (<span id="newCount">0</span>)
+                        </button>
+                        <button class="tab-btn" onclick="filterContacts('In Progress')">
+                            In Progress (<span id="progressCount">0</span>)
+                        </button>
+                        <button class="tab-btn" onclick="filterContacts('Completed')">
+                            Completed (<span id="completedCount">0</span>)
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Contacts</h3>
+                        <div class="stat-number" id="totalContacts">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>New Requests</h3>
+                        <div class="stat-number" id="newContacts">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>In Progress</h3>
+                        <div class="stat-number" id="progressContacts">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Completed</h3>
+                        <div class="stat-number" id="completedContacts">0</div>
+                    </div>
+                </div>
+                
+                <!-- Contacts List -->
+                <div class="admin-section">
+                    <div id="contactsList" class="contacts-list">
+                        <div class="loading">Loading contacts...</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/admin.js"></script>
+    <script src="../js/space-background.js"></script>
+    <script>
+        checkAuth();
+        
+        let allContacts = [];
+        let currentFilter = 'all';
+        
+        // Mobile sidebar toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('adminSidebar');
+            sidebar.classList.toggle('active');
+        }
+        
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('adminSidebar');
+            const toggle = document.querySelector('.mobile-menu-toggle');
+            
+            if (window.innerWidth <= 768 && 
+                !sidebar.contains(event.target) && 
+                !toggle.contains(event.target) &&
+                sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+            }
+        });
+        
+        async function loadContacts() {
+            try {
+                const token = localStorage.getItem('adminToken');
+                const response = await fetch('/api/admin/contacts', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (!response.ok) throw new Error('Failed to load contacts');
+                
+                allContacts = await response.json();
+                updateStats();
+                displayContacts(allContacts);
+            } catch (error) {
+                console.error('Error loading contacts:', error);
+                document.getElementById('contactsList').innerHTML = 
+                    '<p class="error">Error loading contacts. Please try again.</p>';
+            }
+        }
+        
+        function updateStats() {
+            const newCount = allContacts.filter(c => c.status === 'New').length;
+            const progressCount = allContacts.filter(c => c.status === 'In Progress').length;
+            const completedCount = allContacts.filter(c => c.status === 'Completed').length;
+            
+            document.getElementById('totalContacts').textContent = allContacts.length;
+            document.getElementById('newContacts').textContent = newCount;
+            document.getElementById('progressContacts').textContent = progressCount;
+            document.getElementById('completedContacts').textContent = completedCount;
+            
+            document.getElementById('allCount').textContent = allContacts.length;
+            document.getElementById('newCount').textContent = newCount;
+            document.getElementById('progressCount').textContent = progressCount;
+            document.getElementById('completedCount').textContent = completedCount;
+        }
+        
+        function filterContacts(status) {
+            currentFilter = status;
+            
+            // Update active tab
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Filter contacts
+            let filtered = allContacts;
+            if (status !== 'all') {
+                filtered = allContacts.filter(c => c.status === status);
+            }
+            
+            displayContacts(filtered);
+        }
+        
+        function displayContacts(contacts) {
+            const list = document.getElementById('contactsList');
+            
+            if (contacts.length === 0) {
+                list.innerHTML = '<p>No contacts found.</p>';
+                return;
+            }
+            
+            list.innerHTML = contacts.map(contact => `
+                <div class="contact-card">
+                    <div class="contact-header">
+                        <strong>${contact.name}</strong>
+                        <span class="status-badge status-${contact.status.toLowerCase().replace(' ', '-')}">
+                            ${contact.status}
+                        </span>
+                    </div>
+                    <div class="contact-details">
+                        <p><strong>📧 Email:</strong> <a href="mailto:${contact.email}">${contact.email}</a></p>
+                        ${contact.phone ? `<p><strong>📱 Phone:</strong> <a href="tel:${contact.phone}">${contact.phone}</a></p>` : ''}
+                        ${contact.projectTitle ? `<p><strong>📦 Project:</strong> ${contact.projectTitle}</p>` : ''}
+                        <p><strong>💬 Message:</strong> ${contact.message}</p>
+                        <p class="contact-date">📅 ${new Date(contact.createdAt).toLocaleString('hi-IN')}</p>
+                    </div>
+                    <div class="contact-actions">
+                        <select onchange="updateContactStatus('${contact._id}', this.value)" class="status-select">
+                            <option value="New" ${contact.status === 'New' ? 'selected' : ''}>New</option>
+                            <option value="In Progress" ${contact.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+                            <option value="Completed" ${contact.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                        </select>
+                        <a href="mailto:${contact.email}" class="btn btn-secondary btn-sm">Reply via Email</a>
+                        ${contact.phone ? `<a href="https://wa.me/${contact.phone.replace(/[^0-9]/g, '')}" class="btn btn-success btn-sm" target="_blank">WhatsApp</a>` : ''}
+                        <button class="btn btn-danger btn-sm" onclick="deleteContact('${contact._id}')">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        async function updateContactStatus(id, status) {
+            try {
+                const token = localStorage.getItem('adminToken');
+                await fetch(`/api/admin/contacts/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status })
+                });
+                loadContacts();
+            } catch (error) {
+                alert('Error updating status');
+            }
+        }
+        
+        async function deleteContact(id) {
+            if (!confirm('Are you sure you want to delete this contact?')) return;
+            
+            try {
+                const token = localStorage.getItem('adminToken');
+                await fetch(`/api/admin/contacts/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                alert('Contact deleted successfully!');
+                loadContacts();
+            } catch (error) {
+                alert('Error deleting contact');
+            }
+        }
+        
+        loadContacts();
+    </script>
+</body>
+</html>

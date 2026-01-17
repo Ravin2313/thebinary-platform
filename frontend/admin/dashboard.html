@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - TheBinary</title>
+    <link rel="stylesheet" href="../css/modern-theme.css">
+    <link rel="stylesheet" href="../css/space-background.css">
+    <link rel="stylesheet" href="../css/admin-panel.css">
+</head>
+<body>
+    <!-- Space Background -->
+    <div class="space-bg"></div>
+    
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" onclick="toggleSidebar()">☰</button>
+    
+    <div class="admin-layout">
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="admin-logo">
+                <h2>⚡ Admin Panel</h2>
+            </div>
+            <nav class="admin-nav">
+                <a href="dashboard.html" class="active">Dashboard</a>
+                <a href="manage-projects.html">Manage Projects</a>
+                <a href="manage-users.html">Manage Users</a>
+                <a href="manage-contacts.html">Manage Contacts</a>
+                <a href="manage-reviews.html">Manage Reviews</a>
+                <a href="analytics.html">Analytics</a>
+                <a href="settings.html">Settings</a>
+                <a href="#" onclick="logout()">Logout</a>
+            </nav>
+        </aside>
+        
+        <main class="admin-main">
+            <header class="admin-header">
+                <h1>Dashboard</h1>
+            </header>
+            
+            <div class="admin-content">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Projects</h3>
+                        <div class="stat-number" id="totalProjects">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Contact Requests</h3>
+                        <div class="stat-number" id="totalContacts">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>New Inquiries</h3>
+                        <div class="stat-number" id="newInquiries">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Users</h3>
+                        <div class="stat-number" id="totalUsers">0</div>
+                    </div>
+                </div>
+                
+                <div class="admin-section">
+                    <div class="section-header">
+                        <h2>Recent Contact Requests</h2>
+                        <a href="manage-contacts.html" class="btn btn-primary">View All</a>
+                    </div>
+                    <div id="contactsList" class="contacts-list">
+                        <div class="loading">Loading...</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/admin.js"></script>
+    <script src="../js/space-background.js"></script>
+    <script>
+        checkAuth();
+        
+        // Mobile sidebar toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('adminSidebar');
+            sidebar.classList.toggle('active');
+        }
+        
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('adminSidebar');
+            const toggle = document.querySelector('.mobile-menu-toggle');
+            
+            if (window.innerWidth <= 768 && 
+                !sidebar.contains(event.target) && 
+                !toggle.contains(event.target) &&
+                sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+            }
+        });
+        
+        async function loadDashboard() {
+            try {
+                const token = localStorage.getItem('adminToken');
+                
+                // Load projects
+                const projectsRes = await fetch('/api/admin/projects', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const projects = await projectsRes.json();
+                document.getElementById('totalProjects').textContent = projects.length;
+                
+                // Load users
+                const usersRes = await fetch('/api/admin/users', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const users = await usersRes.json();
+                document.getElementById('totalUsers').textContent = users.length;
+                
+                // Load contacts
+                const contactsRes = await fetch('/api/admin/contacts', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const contacts = await contactsRes.json();
+                document.getElementById('totalContacts').textContent = contacts.length;
+                
+                const newContacts = contacts.filter(c => c.status === 'New');
+                document.getElementById('newInquiries').textContent = newContacts.length;
+                
+                displayContacts(contacts.slice(0, 5));
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+            }
+        }
+        
+        function displayContacts(contacts) {
+            const list = document.getElementById('contactsList');
+            
+            if (contacts.length === 0) {
+                list.innerHTML = '<p>No contact requests yet.</p>';
+                return;
+            }
+            
+            list.innerHTML = contacts.map(contact => `
+                <div class="contact-card">
+                    <div class="contact-header">
+                        <strong>${contact.name}</strong>
+                        <span class="status-badge status-${contact.status.toLowerCase().replace(' ', '-')}">
+                            ${contact.status}
+                        </span>
+                    </div>
+                    <p><strong>Email:</strong> ${contact.email}</p>
+                    ${contact.phone ? `<p><strong>Phone:</strong> ${contact.phone}</p>` : ''}
+                    ${contact.projectTitle ? `<p><strong>Project:</strong> ${contact.projectTitle}</p>` : ''}
+                    <p><strong>Message:</strong> ${contact.message}</p>
+                    <p class="contact-date">${new Date(contact.createdAt).toLocaleString('hi-IN')}</p>
+                    <div class="contact-actions">
+                        <select onchange="updateContactStatus('${contact._id}', this.value)">
+                            <option value="New" ${contact.status === 'New' ? 'selected' : ''}>New</option>
+                            <option value="In Progress" ${contact.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+                            <option value="Completed" ${contact.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                        </select>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        async function updateContactStatus(id, status) {
+            try {
+                const token = localStorage.getItem('adminToken');
+                await fetch(`/api/admin/contacts/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status })
+                });
+                loadDashboard();
+            } catch (error) {
+                alert('Error updating status');
+            }
+        }
+        
+        loadDashboard();
+    </script>
+</body>
+</html>

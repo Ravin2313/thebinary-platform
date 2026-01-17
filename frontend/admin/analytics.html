@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard - TheBinary</title>
+    <link rel="stylesheet" href="../css/modern-theme.css">
+    <link rel="stylesheet" href="../css/space-background.css">
+    <link rel="stylesheet" href="../css/admin-panel.css">
+    <link rel="stylesheet" href="../css/analytics.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <!-- Space Background -->
+    <div class="space-bg"></div>
+    
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" onclick="toggleSidebar()">☰</button>
+    
+    <div class="admin-layout">
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="admin-logo">
+                <h2>⚡ Admin Panel</h2>
+            </div>
+            <nav class="admin-nav">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="manage-projects.html">Manage Projects</a>
+                <a href="manage-users.html">Manage Users</a>
+                <a href="manage-contacts.html">Manage Contacts</a>
+                <a href="manage-reviews.html">Manage Reviews</a>
+                <a href="analytics.html" class="active">Analytics</a>
+                <a href="settings.html">Settings</a>
+                <a href="#" onclick="logout()">Logout</a>
+            </nav>
+        </aside>
+        
+        <main class="admin-main">
+            <header class="admin-header">
+                <div>
+                    <h1>📊 Analytics Dashboard</h1>
+                    <p>Real-time insights and performance metrics</p>
+                </div>
+                <div class="header-actions">
+                    <select id="timeRange" class="time-selector" onchange="updateCharts()">
+                        <option value="7">Last 7 Days</option>
+                        <option value="30" selected>Last 30 Days</option>
+                        <option value="90">Last 90 Days</option>
+                        <option value="365">Last Year</option>
+                    </select>
+                </div>
+            </header>
+            
+            <div class="admin-content">
+                <!-- Key Metrics Cards -->
+                <div class="metrics-grid">
+                    <div class="metric-card" data-animate="fade-up">
+                        <div class="metric-icon">📦</div>
+                        <div class="metric-content">
+                            <h3>Total Projects</h3>
+                            <div class="metric-value" id="totalProjects">0</div>
+                            <div class="metric-change positive">
+                                <span class="change-icon">↗</span>
+                                <span id="projectsChange">+0%</span> from last month
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card" data-animate="fade-up" style="animation-delay: 0.1s">
+                        <div class="metric-icon">👥</div>
+                        <div class="metric-content">
+                            <h3>Total Users</h3>
+                            <div class="metric-value" id="totalUsers">0</div>
+                            <div class="metric-change positive">
+                                <span class="change-icon">↗</span>
+                                <span id="usersChange">+0%</span> from last month
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card" data-animate="fade-up" style="animation-delay: 0.2s">
+                        <div class="metric-icon">⭐</div>
+                        <div class="metric-content">
+                            <h3>Total Reviews</h3>
+                            <div class="metric-value" id="totalReviews">0</div>
+                            <div class="metric-change positive">
+                                <span class="change-icon">↗</span>
+                                <span id="reviewsChange">+0%</span> from last month
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card" data-animate="fade-up" style="animation-delay: 0.3s">
+                        <div class="metric-icon">💬</div>
+                        <div class="metric-content">
+                            <h3>Contact Requests</h3>
+                            <div class="metric-value" id="totalContacts">0</div>
+                            <div class="metric-change positive">
+                                <span class="change-icon">↗</span>
+                                <span id="contactsChange">+0%</span> from last month
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Charts Row 1 -->
+                <div class="charts-row">
+                    <div class="chart-card" data-animate="fade-up">
+                        <div class="chart-header">
+                            <h3>📈 User Growth Trend</h3>
+                            <span class="chart-subtitle">New registrations over time</span>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="userGrowthChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card" data-animate="fade-up" style="animation-delay: 0.1s">
+                        <div class="chart-header">
+                            <h3>📊 Project Categories</h3>
+                            <span class="chart-subtitle">Distribution by category</span>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Charts Row 2 -->
+                <div class="charts-row">
+                    <div class="chart-card chart-card-full" data-animate="fade-up">
+                        <div class="chart-header">
+                            <h3>💰 Revenue Overview</h3>
+                            <span class="chart-subtitle">Project prices and trends</span>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Charts Row 3 -->
+                <div class="charts-row">
+                    <div class="chart-card" data-animate="fade-up">
+                        <div class="chart-header">
+                            <h3>⭐ Rating Distribution</h3>
+                            <span class="chart-subtitle">Review ratings breakdown</span>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="ratingChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card" data-animate="fade-up" style="animation-delay: 0.1s">
+                        <div class="chart-header">
+                            <h3>📅 Activity Heatmap</h3>
+                            <span class="chart-subtitle">Contact requests by day</span>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="activityChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Top Performers -->
+                <div class="top-performers" data-animate="fade-up">
+                    <div class="performers-section">
+                        <h3>🏆 Top Projects</h3>
+                        <div id="topProjects" class="performers-list">
+                            <div class="loading">Loading...</div>
+                        </div>
+                    </div>
+                    
+                    <div class="performers-section">
+                        <h3>🌟 Recent Reviews</h3>
+                        <div id="recentReviews" class="performers-list">
+                            <div class="loading">Loading...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/admin.js"></script>
+    <script src="../js/space-background.js"></script>
+    <script src="../js/analytics.js"></script>
+</body>
+</html>

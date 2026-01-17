@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Projects - TheBinary Admin</title>
+    <link rel="stylesheet" href="../css/modern-theme.css">
+    <link rel="stylesheet" href="../css/space-background.css">
+    <link rel="stylesheet" href="../css/admin-panel.css">
+</head>
+<body>
+    <!-- Space Background -->
+    <div class="space-bg"></div>
+    
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" onclick="toggleSidebar()">☰</button>
+    
+    <div class="admin-layout">
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="admin-logo">
+                <h2>⚡ Admin Panel</h2>
+            </div>
+            <nav class="admin-nav">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="manage-projects.html" class="active">Manage Projects</a>
+                <a href="manage-users.html">Manage Users</a>
+                <a href="manage-contacts.html">Manage Contacts</a>
+                <a href="manage-reviews.html">Manage Reviews</a>
+                <a href="analytics.html">Analytics</a>
+                <a href="settings.html">Settings</a>
+                <a href="#" onclick="logout()">Logout</a>
+            </nav>
+        </aside>
+        
+        <main class="admin-main">
+            <header class="admin-header">
+                <h1>Manage Projects</h1>
+                <button class="btn btn-primary" onclick="showAddForm()">+ Add New Project</button>
+            </header>
+            
+            <div class="admin-content">
+                <!-- Add/Edit Form -->
+                <div id="projectForm" class="project-form" style="display: none;">
+                    <h2 id="formTitle">Add New Project</h2>
+                    <form id="addProjectForm" enctype="multipart/form-data">
+                        <input type="hidden" id="projectId" name="projectId">
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Title *</label>
+                                <input type="text" name="title" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Category *</label>
+                                <select name="category" required>
+                                    <option value="College Project">College Project</option>
+                                    <option value="School Project">School Project</option>
+                                    <option value="Website">Website</option>
+                                    <option value="Mobile App">Mobile App</option>
+                                    <option value="Web Application">Web Application</option>
+                                    <option value="AI/ML">AI/ML</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Description *</label>
+                            <textarea name="description" rows="4" required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Features (one per line)</label>
+                            <textarea id="featuresInput" rows="4" 
+                                placeholder="Feature 1&#10;Feature 2&#10;Feature 3"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Technologies (comma separated)</label>
+                            <input type="text" id="technologiesInput" 
+                                placeholder="HTML, CSS, JavaScript, Node.js">
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Price (₹) *</label>
+                                <input type="number" name="price" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Status</label>
+                                <select name="status">
+                                    <option value="Available">Available</option>
+                                    <option value="Sold">Sold</option>
+                                    <option value="Custom Order">Custom Order</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Demo Link (optional)</label>
+                            <input type="url" name="demoLink">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Images (max 5)</label>
+                            <input type="file" name="images" multiple accept="image/*">
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Save Project</button>
+                            <button type="button" class="btn btn-secondary" onclick="hideForm()">Cancel</button>
+                        </div>
+                    </form>
+                    <div id="formMessage" class="form-message"></div>
+                </div>
+                
+                <!-- Projects List -->
+                <div id="projectsList" class="projects-admin-list">
+                    <div class="loading">Loading projects...</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/admin.js"></script>
+    <script src="../js/space-background.js"></script>
+    <script>
+        checkAuth();
+        
+        // Mobile sidebar toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('adminSidebar');
+            sidebar.classList.toggle('active');
+        }
+        
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('adminSidebar');
+            const toggle = document.querySelector('.mobile-menu-toggle');
+            
+            if (window.innerWidth <= 768 && 
+                !sidebar.contains(event.target) && 
+                !toggle.contains(event.target) &&
+                sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+            }
+        });
+        
+        let editingProjectId = null;
+        
+        async function loadProjects() {
+            try {
+                const token = localStorage.getItem('adminToken');
+                const response = await fetch('/api/admin/projects', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const projects = await response.json();
+                displayProjects(projects);
+            } catch (error) {
+                document.getElementById('projectsList').innerHTML = 
+                    '<p class="error">Error loading projects</p>';
+            }
+        }
+        
+        function displayProjects(projects) {
+            const list = document.getElementById('projectsList');
+            
+            if (projects.length === 0) {
+                list.innerHTML = '<p>No projects yet. Add your first project!</p>';
+                return;
+            }
+            
+            list.innerHTML = `
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Reviews</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${projects.map(p => `
+                            <tr>
+                                <td><strong>${p.title}</strong></td>
+                                <td>${p.category}</td>
+                                <td>₹${p.price}</td>
+                                <td><span class="status-badge">${p.status}</span></td>
+                                <td>${p.reviews.length}</td>
+                                <td>
+                                    <button class="btn-icon" onclick="editProject('${p._id}')" title="Edit">✏️</button>
+                                    <button class="btn-icon" onclick="deleteProject('${p._id}')" title="Delete">🗑️</button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+        
+        function showAddForm() {
+            document.getElementById('formTitle').textContent = 'Add New Project';
+            document.getElementById('addProjectForm').reset();
+            document.getElementById('projectId').value = '';
+            editingProjectId = null;
+            document.getElementById('projectForm').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+        
+        function hideForm() {
+            document.getElementById('projectForm').style.display = 'none';
+            document.getElementById('formMessage').textContent = '';
+        }
+        
+        async function editProject(id) {
+            try {
+                const token = localStorage.getItem('adminToken');
+                const response = await fetch(`/api/projects/${id}`);
+                const project = await response.json();
+                
+                document.getElementById('formTitle').textContent = 'Edit Project';
+                document.getElementById('projectId').value = id;
+                editingProjectId = id;
+                
+                const form = document.getElementById('addProjectForm');
+                form.title.value = project.title;
+                form.category.value = project.category;
+                form.description.value = project.description;
+                document.getElementById('featuresInput').value = project.features.join('\n');
+                document.getElementById('technologiesInput').value = project.technologies.join(', ');
+                form.price.value = project.price;
+                form.status.value = project.status;
+                form.demoLink.value = project.demoLink || '';
+                
+                document.getElementById('projectForm').style.display = 'block';
+                window.scrollTo(0, 0);
+            } catch (error) {
+                alert('Error loading project');
+            }
+        }
+        
+        async function deleteProject(id) {
+            if (!confirm('Are you sure you want to delete this project?')) return;
+            
+            try {
+                const token = localStorage.getItem('adminToken');
+                await fetch(`/api/admin/projects/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                loadProjects();
+            } catch (error) {
+                alert('Error deleting project');
+            }
+        }
+        
+        document.getElementById('addProjectForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            
+            // Process features and technologies
+            const features = document.getElementById('featuresInput').value
+                .split('\n').filter(f => f.trim());
+            const technologies = document.getElementById('technologiesInput').value
+                .split(',').map(t => t.trim()).filter(t => t);
+            
+            formData.set('features', JSON.stringify(features));
+            formData.set('technologies', JSON.stringify(technologies));
+            
+            const messageDiv = document.getElementById('formMessage');
+            messageDiv.textContent = 'Saving...';
+            messageDiv.className = 'form-message';
+            
+            try {
+                const token = localStorage.getItem('adminToken');
+                const url = editingProjectId 
+                    ? `/api/admin/projects/${editingProjectId}`
+                    : '/api/admin/projects';
+                const method = editingProjectId ? 'PUT' : 'POST';
+                
+                const response = await fetch(url, {
+                    method,
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    messageDiv.textContent = 'Project saved successfully!';
+                    messageDiv.className = 'form-message success';
+                    setTimeout(() => {
+                        hideForm();
+                        loadProjects();
+                    }, 1500);
+                } else {
+                    messageDiv.textContent = 'Error saving project';
+                    messageDiv.className = 'form-message error';
+                }
+            } catch (error) {
+                messageDiv.textContent = 'Error saving project';
+                messageDiv.className = 'form-message error';
+            }
+        });
+        
+        loadProjects();
+    </script>
+</body>
+</html>

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Projects - TheBinary</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/modern-theme.css">
+    <link rel="stylesheet" href="css/space-background.css">
+    <link rel="stylesheet" href="css/homepage-layout.css">
+    <link rel="stylesheet" href="css/projects-layout.css">
+    <link rel="stylesheet" href="css/bootstrap-custom.css">
+    <link rel="stylesheet" href="css/project-showcase.css">
+    <link rel="stylesheet" href="css/search-filters.css">
+    <link rel="stylesheet" href="css/whatsapp-float.css">
+    <link rel="stylesheet" href="css/project-preview-modal.css">
+    <link rel="stylesheet" href="css/loading-states.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Space Background -->
+    <div class="space-bg"></div>
+
+    <!-- Navigation - Bootstrap Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark custom-navbar">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <span class="brand-icon">⚡</span>
+                <span class="brand-text">TheBinary</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <!-- Dynamic menu items will be inserted here -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="projects-header">
+        <div class="container">
+            <h1 class="fade-in">
+                <span class="text-gradient">Explore Our Projects</span>
+            </h1>
+            <p class="fade-in">
+                Find the perfect project for your needs
+            </p>
+        </div>
+    </section>
+
+    <!-- Search & Filters Section -->
+    <section class="filters-section">
+        <div class="container">
+            <!-- Search & Filter Container -->
+            <div class="search-filter-section">
+                <!-- Search Bar -->
+                <div class="search-bar">
+                    <div class="search-input-wrapper">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" 
+                               id="searchInput" 
+                               class="search-input" 
+                               placeholder="Search projects by name, description, or technology...">
+                        <button class="clear-search" onclick="clearSearch()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filters Grid -->
+                <div class="filters-grid">
+                    <!-- Category Filter -->
+                    <div class="filter-group">
+                        <label class="filter-label">
+                            <i class="fas fa-folder"></i>
+                            Category
+                        </label>
+                        <select id="categoryFilter" class="filter-select">
+                            <option value="All">All Categories</option>
+                            <option value="College Project">College Project</option>
+                            <option value="School Project">School Project</option>
+                            <option value="Website">Website</option>
+                            <option value="Mobile App">Mobile App</option>
+                            <option value="Web Application">Web Application</option>
+                            <option value="AI/ML">AI/ML</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <!-- Technology Filter -->
+                    <div class="filter-group">
+                        <label class="filter-label">
+                            <i class="fas fa-code"></i>
+                            Technology
+                        </label>
+                        <div class="tech-filter-container">
+                            <button class="tech-filter-button" onclick="toggleTechDropdown()">
+                                <span id="techFilterText">All Technologies</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="tech-options" id="techOptions">
+                                <!-- Will be populated dynamically -->
+                            </div>
+                        </div>
+                        <div class="selected-techs" id="selectedTechs"></div>
+                    </div>
+
+                    <!-- Difficulty Filter -->
+                    <div class="filter-group">
+                        <label class="filter-label">
+                            <i class="fas fa-signal"></i>
+                            Difficulty
+                        </label>
+                        <select id="difficultyFilter" class="filter-select">
+                            <option value="All">All Levels</option>
+                            <option value="Beginner">Beginner</option>
+                            <option value="Intermediate">Intermediate</option>
+                            <option value="Advanced">Advanced</option>
+                        </select>
+                    </div>
+
+                    <!-- Price Range Filter -->
+                    <div class="filter-group">
+                        <label class="filter-label">
+                            <i class="fas fa-rupee-sign"></i>
+                            Price Range
+                        </label>
+                        <div class="price-range-container">
+                            <input type="range" 
+                                   id="priceRange" 
+                                   class="price-range-slider" 
+                                   min="0" 
+                                   max="10000" 
+                                   value="10000" 
+                                   step="500">
+                            <div class="price-range-values">
+                                <span>₹0</span>
+                                <span class="price-value">Up to ₹<span id="priceValue">10000</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filter Actions -->
+                <div class="filter-actions">
+                    <button class="clear-filters-btn" onclick="clearAllFilters()">
+                        <i class="fas fa-times-circle"></i> Clear All
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results Header -->
+            <div class="results-header">
+                <div class="results-count">
+                    Showing <strong id="resultsCount">0</strong> projects
+                </div>
+                <div class="sort-container">
+                    <span class="sort-label">Sort by:</span>
+                    <select id="sortSelect" class="sort-select">
+                        <option value="newest">Newest First</option>
+                        <option value="popular">Most Popular</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="rating">Highest Rated</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Projects Grid -->
+            <div id="projectsGrid" class="projects-grid">
+                <div class="loading">Loading projects...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <!-- Footer -->
+    <footer class="modern-footer">
+        <div class="container">
+            <!-- Footer Main Content -->
+            <div class="footer-grid">
+                <!-- Brand Section -->
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <span class="logo-icon">⚡</span>
+                        <span class="logo-text">TheBinary</span>
+                    </div>
+                    <p class="footer-tagline">
+                        Building futures with cutting-edge projects for students
+                    </p>
+                    <div class="footer-social">
+                        <a href="https://wa.me/918839540925" class="social-link" aria-label="WhatsApp" target="_blank" title="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="mailto:ravinonline23@gmail.com" class="social-link" aria-label="Email" title="Email">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                        <a href="https://github.com/ravin2313" class="social-link" aria-label="GitHub" target="_blank" title="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">🏠 Home</a></li>
+                        <li><a href="projects.html">📦 All Projects</a></li>
+                        <li><a href="contact.html">💬 Contact Us</a></li>
+                        <li><a href="student-login.html">🎓 Student Login</a></li>
+                        <li><a href="student-register.html">✨ Register</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Categories -->
+                <div class="footer-links">
+                    <h4>Categories</h4>
+                    <ul>
+                        <li><a href="projects.html?category=College Project">🎓 College Projects</a></li>
+                        <li><a href="projects.html?category=School Project">📖 School Projects</a></li>
+                        <li><a href="projects.html?category=Website">🌐 Websites</a></li>
+                        <li><a href="projects.html?category=Mobile App">📱 Mobile Apps</a></li>
+                        <li><a href="projects.html?category=AI/ML">🤖 AI/ML Projects</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact Info -->
+                <div class="footer-contact">
+                    <h4>Get In Touch</h4>
+                    <div class="contact-item">
+                        <span class="contact-icon">📧</span>
+                        <div>
+                            <p class="contact-label">Email</p>
+                            <a href="mailto:ravinonline23@gmail.com">ravinonline23@gmail.com</a>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-icon">📱</span>
+                        <div>
+                            <p class="contact-label">Phone</p>
+                            <a href="tel:+918839540925">+91 8839540925</a>
+                        </div>
+                    </div>
+                    <a href="https://wa.me/918839540925?text=Hi%2C%20I'm%20interested%20in%20TheBinary%20projects" class="footer-cta-btn" target="_blank">
+                        💬 Chat on WhatsApp
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <p>&copy; 2026 TheBinary. All rights reserved.</p>
+                <p class="footer-love">Made with ❤️ for Students</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/navbar-manager.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/student.js"></script>
+    <script src="js/mobile-nav.js"></script>
+    <script src="js/space-background.js"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/loading-states.js"></script>
+    <script src="js/project-filters.js"></script>
+    <script src="js/whatsapp-float.js"></script>
+    <script src="js/project-preview-modal.js"></script></script>
+    
+    <script>
+        // displayProjects function - used by project-filters.js
+        function displayProjects(projects) {
+            const grid = document.getElementById('projectsGrid');
+            
+            if (projects.length === 0) {
+                showEmpty(grid, {
+                    title: 'No Projects Found',
+                    message: 'We couldn\'t find any projects matching your search criteria. Try adjusting your filters or browse all projects.',
+                    icon: '🔍',
+                    actionText: 'Clear Filters',
+                    actionLink: 'javascript:clearAllFilters()'
+                });
+                return;
+            }
+            
+            grid.innerHTML = projects.map((project, index) => {
+                // Calculate if project is new (within last 7 days)
+                const isNew = (Date.now() - new Date(project.createdAt).getTime()) < (7 * 24 * 60 * 60 * 1000);
+                
+                // Calculate if trending (high views or wishlist)
+                const isTrending = project.views > 50;
+                
+                // Calculate if popular (high reviews)
+                const isPopular = project.reviews && project.reviews.length > 5;
+                
+                // Calculate average rating
+                const avgRating = project.reviews && project.reviews.length > 0
+                    ? (project.reviews.reduce((sum, r) => sum + r.rating, 0) / project.reviews.length).toFixed(1)
+                    : 0;
+                
+                return `
+                <div class="project-card fade-in" style="animation-delay: ${index * 0.1}s;">
+                    <div class="project-card-header">
+                        <div class="project-image">
+                            <!-- Badges -->
+                            <div class="project-badges">
+                                ${project.isFeatured ? '<span class="badge badge-featured">⭐ Featured</span>' : ''}
+                                ${isTrending ? '<span class="badge badge-trending">🔥 Trending</span>' : ''}
+                                ${isNew ? '<span class="badge badge-new">✨ New</span>' : ''}
+                                ${isPopular ? '<span class="badge badge-popular">💎 Popular</span>' : ''}
+                            </div>
+                            
+                            <img src="${project.images[0] || '/images/placeholder.jpg'}" 
+                                 alt="${project.title}"
+                                 onerror="this.src='https://via.placeholder.com/400x200/21262d/58a6ff?text=Project+Image'">
+                            
+                            <div class="quick-view-overlay">
+                                <button class="quick-view-btn" onclick="openProjectPreview('${project._id}'); event.stopPropagation();">
+                                    <i class="fas fa-eye"></i> Quick View
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="project-info">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                            <span class="project-category">${project.category}</span>
+                            <span class="difficulty-badge difficulty-${project.difficulty ? project.difficulty.toLowerCase() : 'intermediate'}">
+                                ${project.difficulty || 'Intermediate'}
+                            </span>
+                        </div>
+                        
+                        <h3>${project.title}</h3>
+                        <p style="color: var(--text-secondary); margin: 0.5rem 0; line-height: 1.5; font-size: 0.9rem;">
+                            ${project.description.substring(0, 80)}...
+                        </p>
+                        
+                        <!-- Project Meta -->
+                        <div class="project-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-eye"></i>
+                                <span>${project.views || 0} views</span>
+                            </div>
+                            ${avgRating > 0 ? `
+                            <div class="meta-item">
+                                <i class="fas fa-star"></i>
+                                <span>${avgRating} (${project.reviews.length})</span>
+                            </div>
+                            ` : ''}
+                            ${project.completionTime ? `
+                            <div class="meta-item">
+                                <i class="fas fa-clock"></i>
+                                <span>${project.completionTime}</span>
+                            </div>
+                            ` : ''}
+                        </div>
+                        
+                        <!-- Technology Tags -->
+                        <div class="tech-tags">
+                            ${project.technologies.slice(0, 4).map(tech => 
+                                `<span class="tech-tag">${tech}</span>`
+                            ).join('')}
+                            ${project.technologies.length > 4 ? `<span class="tech-tag">+${project.technologies.length - 4} more</span>` : ''}
+                        </div>
+                        
+                        <div class="project-footer">
+                            <span class="project-price">₹${project.price}</span>
+                            <a href="project-detail.html?id=${project._id}" class="btn btn-primary btn-small" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                View Details →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `}).join('');
+            
+            // Re-initialize animations for new cards
+            if (window.animations) {
+                setTimeout(() => {
+                    document.querySelectorAll('.project-card').forEach(card => {
+                        card.classList.add('visible');
+                    });
+                }, 100);
+            }
+        }
+    </script>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

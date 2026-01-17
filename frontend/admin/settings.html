@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Settings - TheBinary</title>
+    <link rel="stylesheet" href="../css/modern-theme.css">
+    <link rel="stylesheet" href="../css/space-background.css">
+    <link rel="stylesheet" href="../css/admin-panel.css">
+</head>
+<body>
+    <!-- Space Background -->
+    <div class="space-bg"></div>
+    
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" onclick="toggleSidebar()">☰</button>
+    
+    <div class="admin-layout">
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="admin-logo">
+                <h2>⚡ Admin Panel</h2>
+            </div>
+            <nav class="admin-nav">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="manage-projects.html">Manage Projects</a>
+                <a href="manage-users.html">Manage Users</a>
+                <a href="manage-contacts.html">Manage Contacts</a>
+                <a href="manage-reviews.html">Manage Reviews</a>
+                <a href="analytics.html">Analytics</a>
+                <a href="settings.html" class="active">Settings</a>
+                <a href="#" onclick="logout()">Logout</a>
+            </nav>
+        </aside>
+        
+        <main class="admin-main">
+            <header class="admin-header">
+                <h1>⚙️ Admin Settings</h1>
+                <p>Manage your admin account and site settings</p>
+            </header>
+            
+            <div class="admin-content">
+                <!-- Settings Tabs -->
+                <div class="settings-tabs">
+                    <button class="settings-tab active" onclick="showTab('account')">
+                        👤 Account Settings
+                    </button>
+                    <button class="settings-tab" onclick="showTab('security')">
+                        🔒 Security
+                    </button>
+                    <button class="settings-tab" onclick="showTab('site')">
+                        🌐 Site Settings
+                    </button>
+                    <button class="settings-tab" onclick="showTab('database')">
+                        💾 Database
+                    </button>
+                </div>
+                
+                <!-- Account Settings Tab -->
+                <div id="accountTab" class="settings-content active">
+                    <div class="settings-section">
+                        <h2>👤 Account Information</h2>
+                        <form id="accountForm" class="settings-form">
+                            <div class="form-group">
+                                <label>Admin Email</label>
+                                <input type="email" id="adminEmail" value="" readonly>
+                                <small>Email cannot be changed for security reasons</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Admin Name (Optional)</label>
+                                <input type="text" id="adminName" placeholder="Your name">
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </form>
+                        <div id="accountMessage" class="form-message"></div>
+                    </div>
+                </div>
+                
+                <!-- Security Tab -->
+                <div id="securityTab" class="settings-content">
+                    <div class="settings-section">
+                        <h2>🔒 Change Password</h2>
+                        <form id="passwordForm" class="settings-form">
+                            <div class="form-group">
+                                <label>Current Password *</label>
+                                <input type="password" name="currentPassword" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>New Password * (minimum 6 characters)</label>
+                                <input type="password" name="newPassword" required minlength="6">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Confirm New Password *</label>
+                                <input type="password" name="confirmPassword" required minlength="6">
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Change Password</button>
+                        </form>
+                        <div id="passwordMessage" class="form-message"></div>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h2>🔐 Admin Login Path</h2>
+                        <div class="info-box">
+                            <p><strong>Current Login Path:</strong></p>
+                            <code id="loginPath">/admin/secret-login-2024</code>
+                            <p class="info-text">⚠️ Keep this path secret! Change it in .env file (ADMIN_LOGIN_PATH)</p>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h2>📊 Session Information</h2>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label">Login Time:</span>
+                                <span id="loginTime">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Session Expires:</span>
+                                <span id="sessionExpiry">24 hours from login</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">IP Address:</span>
+                                <span id="ipAddress">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Site Settings Tab -->
+                <div id="siteTab" class="settings-content">
+                    <div class="settings-section">
+                        <h2>🌐 Site Configuration</h2>
+                        <form id="siteForm" class="settings-form">
+                            <div class="form-group">
+                                <label>Site Name</label>
+                                <input type="text" id="siteName" value="TheBinary">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Contact Email</label>
+                                <input type="email" id="contactEmail" value="info@thebinary.com">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Contact Phone</label>
+                                <input type="tel" id="contactPhone" value="+91 XXXXXXXXXX">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>WhatsApp Number</label>
+                                <input type="tel" id="whatsappNumber" value="91XXXXXXXXXX">
+                                <small>Format: 91XXXXXXXXXX (without +)</small>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Save Settings</button>
+                        </form>
+                        <div id="siteMessage" class="form-message"></div>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h2>🎨 Appearance Settings</h2>
+                        <div class="toggle-group">
+                            <div class="toggle-item">
+                                <label>
+                                    <input type="checkbox" id="maintenanceMode">
+                                    <span>Maintenance Mode</span>
+                                </label>
+                                <small>Show maintenance page to visitors</small>
+                            </div>
+                            
+                            <div class="toggle-item">
+                                <label>
+                                    <input type="checkbox" id="showReviews" checked>
+                                    <span>Show Reviews on Projects</span>
+                                </label>
+                                <small>Display user reviews on project pages</small>
+                            </div>
+                            
+                            <div class="toggle-item">
+                                <label>
+                                    <input type="checkbox" id="allowRegistration" checked>
+                                    <span>Allow New Registrations</span>
+                                </label>
+                                <small>Enable/disable user registration</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Database Tab -->
+                <div id="databaseTab" class="settings-content">
+                    <div class="settings-section">
+                        <h2>💾 Database Statistics</h2>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <h3>Total Projects</h3>
+                                <div class="stat-number" id="dbProjects">0</div>
+                            </div>
+                            <div class="stat-card">
+                                <h3>Total Users</h3>
+                                <div class="stat-number" id="dbUsers">0</div>
+                            </div>
+                            <div class="stat-card">
+                                <h3>Total Reviews</h3>
+                                <div class="stat-number" id="dbReviews">0</div>
+                            </div>
+                            <div class="stat-card">
+                                <h3>Total Contacts</h3>
+                                <div class="stat-number" id="dbContacts">0</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h2>🔗 Database Connection</h2>
+                        <div class="info-box">
+                            <p><strong>Database Type:</strong> MongoDB</p>
+                            <p><strong>Connection Status:</strong> <span class="status-badge status-active">Connected</span></p>
+                            <p class="info-text">💡 Database credentials are stored in .env file</p>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-section danger-zone">
+                        <h2>⚠️ Danger Zone</h2>
+                        <div class="danger-actions">
+                            <div class="danger-item">
+                                <div>
+                                    <h4>Clear All Reviews</h4>
+                                    <p>Remove all reviews from all projects</p>
+                                </div>
+                                <button class="btn btn-danger" onclick="clearAllReviews()">Clear Reviews</button>
+                            </div>
+                            
+                            <div class="danger-item">
+                                <h4>⚠️ Export Database</h4>
+                                <p>Download backup of all data (Coming Soon)</p>
+                                <button class="btn btn-secondary" disabled>Export Data</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/admin.js"></script>
+    <script src="../js/space-background.js"></script>
+    <script>
+        checkAuth();
+        
+        // Mobile sidebar toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('adminSidebar');
+            sidebar.classList.toggle('active');
+        }
+        
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('adminSidebar');
+            const toggle = document.querySelector('.mobile-menu-toggle');
+            
+            if (window.innerWidth <= 768 && 
+                !sidebar.contains(event.target) && 
+                !toggle.contains(event.target) &&
+                sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+            }
+        });
+        
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.settings-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.settings-tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + 'Tab').classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        // Load admin info
+        function loadAdminInfo() {
+            const adminEmail = process.env.ADMIN_EMAIL || 'admin@thebinary.com';
+            document.getElementById('adminEmail').value = adminEmail;
+            
+            // Load login path from env
+            const loginPath = localStorage.getItem('adminLoginPath') || '/admin/secret-login-2024';
+            document.getElementById('loginPath').textContent = loginPath;
+            
+            // Set login time
+            const loginTime = localStorage.getItem('adminLoginTime');
+            if (loginTime) {
+                document.getElementById('loginTime').textContent = new Date(loginTime).toLocaleString('hi-IN');
+            }
+            
+            // Get IP address
+            fetch('https://api.ipify.org?format=json')
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('ipAddress').textContent = data.ip;
+                })
+                .catch(() => {
+                    document.getElementById('ipAddress').textContent = 'Unable to fetch';
+                });
+        }
+        
+        // Load database stats
+        async function loadDatabaseStats() {
+            try {
+                const token = localStorage.getItem('adminToken');
+                
+                const [projects, users, reviews, contacts] = await Promise.all([
+                    fetch('/api/admin/projects', { headers: { 'Authorization': `Bearer ${token}` }}).then(r => r.json()),
+                    fetch('/api/admin/users', { headers: { 'Authorization': `Bearer ${token}` }}).then(r => r.json()),
+                    fetch('/api/admin/reviews', { headers: { 'Authorization': `Bearer ${token}` }}).then(r => r.json()),
+                    fetch('/api/admin/contacts', { headers: { 'Authorization': `Bearer ${token}` }}).then(r => r.json())
+                ]);
+                
+                document.getElementById('dbProjects').textContent = projects.length;
+                document.getElementById('dbUsers').textContent = users.length;
+                document.getElementById('dbReviews').textContent = reviews.length;
+                document.getElementById('dbContacts').textContent = contacts.length;
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+        
+        // Change password
+        document.getElementById('passwordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            
+            const messageDiv = document.getElementById('passwordMessage');
+            
+            // Validate passwords match
+            if (data.newPassword !== data.confirmPassword) {
+                messageDiv.textContent = 'New passwords do not match!';
+                messageDiv.className = 'form-message error';
+                return;
+            }
+            
+            messageDiv.textContent = 'Changing password...';
+            messageDiv.className = 'form-message';
+            
+            try {
+                const token = localStorage.getItem('adminToken');
+                const response = await fetch('/api/admin/change-password', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        currentPassword: data.currentPassword,
+                        newPassword: data.newPassword
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    messageDiv.textContent = 'Password changed successfully!';
+                    messageDiv.className = 'form-message success';
+                    e.target.reset();
+                } else {
+                    messageDiv.textContent = result.message || 'Error changing password';
+                    messageDiv.className = 'form-message error';
+                }
+            } catch (error) {
+                messageDiv.textContent = 'Error changing password';
+                messageDiv.className = 'form-message error';
+            }
+        });
+        
+        // Clear all reviews
+        async function clearAllReviews() {
+            if (!confirm('⚠️ WARNING: This will delete ALL reviews from ALL projects!\n\nThis action cannot be undone. Are you absolutely sure?')) {
+                return;
+            }
+            
+            const confirmText = prompt('Type "DELETE ALL REVIEWS" to confirm:');
+            if (confirmText !== 'DELETE ALL REVIEWS') {
+                alert('Action cancelled');
+                return;
+            }
+            
+            try {
+                const token = localStorage.getItem('adminToken');
+                const response = await fetch('/api/admin/clear-reviews', {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (response.ok) {
+                    alert('All reviews deleted successfully!');
+                    loadDatabaseStats();
+                } else {
+                    alert('Error deleting reviews');
+                }
+            } catch (error) {
+                alert('Error deleting reviews');
+            }
+        }
+        
+        // Save site settings (localStorage for now)
+        document.getElementById('siteForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const messageDiv = document.getElementById('siteMessage');
+            messageDiv.textContent = 'Settings saved successfully! (Note: These are stored locally)';
+            messageDiv.className = 'form-message success';
+            
+            setTimeout(() => {
+                messageDiv.textContent = '';
+            }, 3000);
+        });
+        
+        // Initialize
+        loadAdminInfo();
+        loadDatabaseStats();
+        
+        // Store login time if not exists
+        if (!localStorage.getItem('adminLoginTime')) {
+            localStorage.setItem('adminLoginTime', new Date().toISOString());
+        }
+    </script>
+</body>
+</html>

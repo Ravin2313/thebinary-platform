@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Custom Project - TheBinary</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/modern-theme.css">
+    <link rel="stylesheet" href="css/space-background.css">
+    <link rel="stylesheet" href="css/homepage-layout.css">
+    <link rel="stylesheet" href="css/bootstrap-custom.css">
+    <link rel="stylesheet" href="css/contact-page.css">
+    <link rel="stylesheet" href="css/whatsapp-float.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .request-form-card {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .form-section {
+            background: rgba(22, 27, 34, 0.6);
+            border: 1px solid rgba(88, 166, 255, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .form-section h3 {
+            color: var(--accent-primary);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .form-section h3 i {
+            font-size: 1.75rem;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        .checkbox-item label {
+            cursor: pointer;
+            margin: 0;
+            color: var(--text-secondary);
+        }
+        
+        .budget-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+        }
+        
+        .budget-option {
+            position: relative;
+        }
+        
+        .budget-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+        
+        .budget-option label {
+            display: block;
+            padding: 1rem;
+            background: rgba(88, 166, 255, 0.1);
+            border: 2px solid rgba(88, 166, 255, 0.2);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+        
+        .budget-option input[type="radio"]:checked + label {
+            background: rgba(88, 166, 255, 0.2);
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+        
+        .budget-option label:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
+        }
+        
+        .info-box {
+            background: rgba(88, 166, 255, 0.1);
+            border-left: 4px solid var(--accent-primary);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .info-box p {
+            margin: 0;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .info-box strong {
+            color: var(--accent-primary);
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .form-section {
+                padding: 1.5rem;
+            }
+            
+            .budget-options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Space Background -->
+    <div class="space-bg"></div>
+
+    <!-- Navigation - Bootstrap Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark custom-navbar">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <span class="brand-icon">⚡</span>
+                <span class="brand-text">TheBinary</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <!-- Dynamic menu items will be inserted here -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="contact-header">
+        <div class="container">
+            <h1 class="fade-in">
+                <span class="text-gradient">Request Custom Project</span>
+            </h1>
+            <p class="fade-in">
+                Apni requirements batao, hum aapke liye perfect project banayenge
+            </p>
+        </div>
+    </section>
+
+    <!-- Request Form Section -->
+    <section style="padding: 2rem;">
+        <div class="container">
+            <div class="request-form-card">
+                <div class="info-box fade-in">
+                    <p>
+                        <strong>💡 Note:</strong> Fill out this form with your project requirements. 
+                        Humari team 24 hours mein aapko contact karegi with a detailed quote and timeline.
+                    </p>
+                </div>
+                
+                <form id="projectRequestForm">
+                    <!-- Personal Information -->
+                    <div class="form-section fade-in">
+                        <h3>
+                            <i class="fas fa-user"></i>
+                            Personal Information
+                        </h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Full Name *</label>
+                                <input type="text" name="name" required placeholder="Enter your name">
+                            </div>
+                            <div class="form-group">
+                                <label>Email *</label>
+                                <input type="email" name="email" required placeholder="your.email@example.com">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Phone Number *</label>
+                                <input type="tel" name="phone" required placeholder="+91 XXXXXXXXXX">
+                            </div>
+                            <div class="form-group">
+                                <label>College/School Name</label>
+                                <input type="text" name="institution" placeholder="Your institution name">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project Details -->
+                    <div class="form-section fade-in">
+                        <h3>
+                            <i class="fas fa-project-diagram"></i>
+                            Project Details
+                        </h3>
+                        <div class="form-group">
+                            <label>Project Title *</label>
+                            <input type="text" name="projectTitle" required placeholder="e.g., E-commerce Website with Payment Gateway">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Project Category *</label>
+                            <select name="category" required>
+                                <option value="">Select Category</option>
+                                <option value="College Project">College Project</option>
+                                <option value="School Project">School Project</option>
+                                <option value="Website">Website</option>
+                                <option value="Mobile App">Mobile App</option>
+                                <option value="Web Application">Web Application</option>
+                                <option value="AI/ML">AI/ML Project</option>
+                                <option value="Desktop Application">Desktop Application</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Detailed Description *</label>
+                            <textarea name="description" rows="6" required placeholder="Describe your project in detail... What features do you need? What problem does it solve? Any specific requirements?"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Technical Requirements -->
+                    <div class="form-section fade-in">
+                        <h3>
+                            <i class="fas fa-code"></i>
+                            Technical Requirements
+                        </h3>
+                        
+                        <div class="form-group">
+                            <label>Preferred Technologies (Select all that apply)</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" name="technologies" value="HTML/CSS/JavaScript" id="tech1">
+                                    <label for="tech1">HTML/CSS/JS</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" name="technologies" value="React" id="tech2">
+                                    <label for="tech2">React</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" name="technologies" value="Node.js" id="tech3">
+                                    <label for="tech3">Node.js</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" name="technologies" value="Python" id="tech4">
+                                    <label for="tech4">Python</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" name="technologies" value="Java" id="tech5">
+                                    <label for="tech5">Java</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" name="technologies" value="PHP" id="tech6">
+                                    <label for="tech6">PHP</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" name="technologies" value="MongoDB" id="tech7">
+                                    <label for="tech7">MongoDB</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" name="technologies" value="MySQL" id="tech8">
+                                    <label for="tech8">MySQL</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" name="technologies" value="Android" id="tech9">
+                                    <label for="tech9">Android</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" name="technologies" value="Flutter" id="tech10">
+                                    <label for="tech10">Flutter</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" name="technologies" value="AI/ML" id="tech11">
+                                    <label for="tech11">AI/ML</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" name="technologies" value="No Preference" id="tech12">
+                                    <label for="tech12">No Preference</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Additional Technical Requirements</label>
+                            <textarea name="technicalDetails" rows="4" placeholder="Any specific frameworks, libraries, or technical specifications? (Optional)"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Features & Functionality -->
+                    <div class="form-section fade-in">
+                        <h3>
+                            <i class="fas fa-list-check"></i>
+                            Features & Functionality
+                        </h3>
+                        
+                        <div class="form-group">
+                            <label>Required Features *</label>
+                            <textarea name="features" rows="5" required placeholder="List all the features you need (one per line)&#10;Example:&#10;- User registration and login&#10;- Product catalog with search&#10;- Shopping cart&#10;- Payment gateway integration"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Do you need Admin Panel?</label>
+                            <select name="adminPanel">
+                                <option value="Yes">Yes, I need an admin panel</option>
+                                <option value="No">No admin panel needed</option>
+                                <option value="Not Sure">Not sure</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Timeline & Budget -->
+                    <div class="form-section fade-in">
+                        <h3>
+                            <i class="fas fa-calendar-dollar"></i>
+                            Timeline & Budget
+                        </h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>When do you need this project? *</label>
+                                <select name="deadline" required>
+                                    <option value="">Select Timeline</option>
+                                    <option value="ASAP (1-3 days)">ASAP (1-3 days) - Urgent</option>
+                                    <option value="Within a week">Within a week</option>
+                                    <option value="Within 2 weeks">Within 2 weeks</option>
+                                    <option value="Within a month">Within a month</option>
+                                    <option value="Flexible">Flexible timeline</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Project Complexity</label>
+                                <select name="complexity">
+                                    <option value="Simple">Simple (Basic features)</option>
+                                    <option value="Medium">Medium (Moderate features)</option>
+                                    <option value="Complex">Complex (Advanced features)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Your Budget Range *</label>
+                            <div class="budget-options">
+                                <div class="budget-option">
+                                    <input type="radio" name="budget" value="Under ₹2000" id="budget1" required>
+                                    <label for="budget1">Under ₹2000</label>
+                                </div>
+                                <div class="budget-option">
+                                    <input type="radio" name="budget" value="₹2000 - ₹5000" id="budget2">
+                                    <label for="budget2">₹2000 - ₹5000</label>
+                                </div>
+                                <div class="budget-option">
+                                    <input type="radio" name="budget" value="₹5000 - ₹10000" id="budget3">
+                                    <label for="budget3">₹5000 - ₹10000</label>
+                                </div>
+                                <div class="budget-option">
+                                    <input type="radio" name="budget" value="₹10000 - ₹20000" id="budget4">
+                                    <label for="budget4">₹10000 - ₹20000</label>
+                                </div>
+                                <div class="budget-option">
+                                    <input type="radio" name="budget" value="Above ₹20000" id="budget5">
+                                    <label for="budget5">Above ₹20000</label>
+                                </div>
+                                <div class="budget-option">
+                                    <input type="radio" name="budget" value="Discuss Later" id="budget6">
+                                    <label for="budget6">Discuss Later</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Information -->
+                    <div class="form-section fade-in">
+                        <h3>
+                            <i class="fas fa-info-circle"></i>
+                            Additional Information
+                        </h3>
+                        
+                        <div class="form-group">
+                            <label>Reference Projects/Websites (if any)</label>
+                            <textarea name="references" rows="3" placeholder="Share links to similar projects or websites that you like (Optional)"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Any Other Requirements or Questions?</label>
+                            <textarea name="additionalInfo" rows="4" placeholder="Anything else you'd like us to know? (Optional)"></textarea>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1.25rem; font-size: 1.1rem;">
+                        <i class="fas fa-paper-plane"></i>
+                        Submit Project Request
+                    </button>
+                </form>
+                
+                <div id="formMessage" class="form-message"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="modern-footer">
+        <div class="container">
+            <!-- Footer Main Content -->
+            <div class="footer-grid">
+                <!-- Brand Section -->
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <span class="logo-icon">⚡</span>
+                        <span class="logo-text">TheBinary</span>
+                    </div>
+                    <p class="footer-tagline">
+                        Building futures with cutting-edge projects for students
+                    </p>
+                    <div class="footer-social">
+                        <a href="https://wa.me/918839540925" class="social-link" aria-label="WhatsApp" target="_blank" title="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="mailto:ravinonline23@gmail.com" class="social-link" aria-label="Email" title="Email">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                        <a href="https://github.com/ravin2313" class="social-link" aria-label="GitHub" target="_blank" title="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">🏠 Home</a></li>
+                        <li><a href="projects.html">📦 All Projects</a></li>
+                        <li><a href="contact.html">💬 Contact Us</a></li>
+                        <li><a href="project-request.html">✨ Request Project</a></li>
+                        <li><a href="student-login.html">🎓 Student Login</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Categories -->
+                <div class="footer-links">
+                    <h4>Categories</h4>
+                    <ul>
+                        <li><a href="projects.html?category=College Project">🎓 College Projects</a></li>
+                        <li><a href="projects.html?category=School Project">📖 School Projects</a></li>
+                        <li><a href="projects.html?category=Website">🌐 Websites</a></li>
+                        <li><a href="projects.html?category=Mobile App">📱 Mobile Apps</a></li>
+                        <li><a href="projects.html?category=AI/ML">🤖 AI/ML Projects</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact Info -->
+                <div class="footer-contact">
+                    <h4>Get In Touch</h4>
+                    <div class="contact-item">
+                        <span class="contact-icon">📧</span>
+                        <div>
+                            <p class="contact-label">Email</p>
+                            <a href="mailto:ravinonline23@gmail.com">ravinonline23@gmail.com</a>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-icon">📱</span>
+                        <div>
+                            <p class="contact-label">Phone</p>
+                            <a href="tel:+918839540925">+91 8839540925</a>
+                        </div>
+                    </div>
+                    <a href="https://wa.me/918839540925?text=Hi%2C%20I'm%20interested%20in%20TheBinary%20projects" class="footer-cta-btn" target="_blank">
+                        💬 Chat on WhatsApp
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <p>&copy; 2026 TheBinary. All rights reserved.</p>
+                <p class="footer-love">Made with ❤️ for Students</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/navbar-manager.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/space-background.js"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/whatsapp-float.js"></script>
+    
+    <script>
+        // Handle form submission
+        document.getElementById('projectRequestForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            
+            // Collect all selected technologies
+            const technologies = [];
+            document.querySelectorAll('input[name="technologies"]:checked').forEach(checkbox => {
+                technologies.push(checkbox.value);
+            });
+            
+            // Build data object
+            const data = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                institution: formData.get('institution'),
+                projectTitle: formData.get('projectTitle'),
+                category: formData.get('category'),
+                description: formData.get('description'),
+                technologies: technologies.join(', '),
+                technicalDetails: formData.get('technicalDetails'),
+                features: formData.get('features'),
+                adminPanel: formData.get('adminPanel'),
+                deadline: formData.get('deadline'),
+                complexity: formData.get('complexity'),
+                budget: formData.get('budget'),
+                references: formData.get('references'),
+                additionalInfo: formData.get('additionalInfo'),
+                requestType: 'Custom Project Request'
+            };
+            
+            const messageDiv = document.getElementById('formMessage');
+            messageDiv.textContent = 'Submitting your request...';
+            messageDiv.className = 'form-message';
+            
+            try {
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    messageDiv.textContent = '✅ Project request submitted successfully! We will contact you within 24 hours.';
+                    messageDiv.className = 'form-message success';
+                    e.target.reset();
+                    
+                    // Scroll to message
+                    messageDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else {
+                    messageDiv.textContent = '❌ Error submitting request. Please try again or contact us directly.';
+                    messageDiv.className = 'form-message error';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                messageDiv.textContent = '❌ Error submitting request. Please try again or contact us via WhatsApp.';
+                messageDiv.className = 'form-message error';
+            }
+        });
+    </script>
+</body>
+</html>
