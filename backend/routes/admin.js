@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const Project = require('../models/Project');
 const Contact = require('../models/Contact');
 const User = require('../models/User');
+const AdminSettings = require('../models/AdminSettings');
 const auth = require('../middleware/auth');
 const { upload, deleteImage } = require('../config/cloudinary');
 
@@ -13,7 +14,11 @@ router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
     
-    if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
+    // Check if custom password exists in database
+    const customPassword = await AdminSettings.findOne({ key: 'admin_password' });
+    const adminPassword = customPassword ? customPassword.value : process.env.ADMIN_PASSWORD;
+    
+    if (email === process.env.ADMIN_EMAIL && password === adminPassword) {
       const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '24h' });
       res.json({ token, message: 'Login successful' });
     } else {
@@ -288,13 +293,24 @@ router.post('/change-password', auth, async (req, res) => {
       return res.status(400).json({ message: 'New password must be at least 6 characters' });
     }
     
-    // Note: In production, you should update .env file or use database
-    // For now, we'll just validate and return success
-    // You need to manually update ADMIN_PASSWORD in .env file
+    // Create/Update admin settings in database
+    const AdminSettings = require('../models/AdminSettings');
+    
+    let settings = await AdminSettings.findOne({ key: 'admin_password' });
+    
+    if (settings) {
+      settings.value = newPassword;
+      await settings.save();
+    } else {
+      settings = await AdminSettings.create({
+        key: 'admin_password',
+        value: newPassword
+      });
+    }
     
     res.json({ 
-      message: 'Password verified! Please update ADMIN_PASSWORD in .env file with: ' + newPassword,
-      note: 'Restart server after updating .env file'
+      message: 'Password changed successfully! Please login again with new password.',
+      success: true
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
