@@ -1,15 +1,7 @@
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
-// Create transporter
-const transporter = nodemailer.createTransport({
-    host: 'smtp.sendgrid.net',
-    port: 587,
-    secure: false,
-    auth: {
-        user: 'apikey',
-        pass: process.env.SENDGRID_API_KEY
-    }
-});
+// Initialize Resend
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Email templates
 const emailTemplates = {
@@ -174,16 +166,15 @@ const emailTemplates = {
 // Send email function
 async function sendEmail(to, template) {
     try {
-        const mailOptions = {
-            from: `"TheBinary Platform" <${process.env.EMAIL_USER}>`,
+        const result = await resend.emails.send({
+            from: 'TheBinary Platform <onboarding@resend.dev>',
             to: to,
             subject: template.subject,
             html: template.html
-        };
+        });
         
-        const info = await transporter.sendMail(mailOptions);
-        console.log('✅ Email sent:', info.messageId);
-        return { success: true, messageId: info.messageId };
+        console.log('✅ Email sent:', result.id);
+        return { success: true, messageId: result.id };
     } catch (error) {
         console.error('❌ Email error:', error.message);
         return { success: false, error: error.message };
