@@ -146,11 +146,34 @@ function initCardTilt() {
     });
 }
 
-// Parallax Effect
+// Parallax Effect with Fade
 function initParallax() {
     window.addEventListener('scroll', () => {
         const scrolled = window.pageYOffset;
         
+        // Fade out hero content on scroll
+        const hero = document.querySelector('.hero');
+        const heroContent = document.querySelector('.hero-content');
+        
+        if (hero && heroContent) {
+            const heroHeight = hero.offsetHeight;
+            const fadeStart = heroHeight * 0.3; // Start fading at 30% of hero height
+            const fadeEnd = heroHeight * 0.95; // Complete fade at 95% of hero height
+            
+            if (scrolled <= fadeStart) {
+                heroContent.style.opacity = '1';
+                heroContent.style.transform = 'translateY(0)';
+            } else if (scrolled >= fadeEnd) {
+                heroContent.style.opacity = '0';
+                heroContent.style.transform = 'translateY(-30px)';
+            } else {
+                const fadeProgress = (scrolled - fadeStart) / (fadeEnd - fadeStart);
+                heroContent.style.opacity = 1 - fadeProgress;
+                heroContent.style.transform = `translateY(-${fadeProgress * 30}px)`;
+            }
+        }
+        
+        // Parallax for other elements
         document.querySelectorAll('.parallax').forEach(el => {
             const speed = el.dataset.speed || 0.5;
             el.style.transform = `translateY(${scrolled * speed}px)`;

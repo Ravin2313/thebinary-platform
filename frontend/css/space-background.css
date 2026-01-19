@@ -30,43 +30,49 @@
     z-index: 0 !important;
 }
 
-/* Ensure ALL content is above space background but below mobile menu */
-body > *:not(.space-bg):not(.nav-overlay):not(.nav-links) {
+/* Ensure ALL content is above space background */
+body > *:not(.space-bg) {
     position: relative;
     z-index: 1;
 }
 
+/* Main content sections */
 header,
 nav,
 .navbar,
 main,
 section,
-footer,
+footer {
+    position: relative;
+    z-index: 2;
+}
+
+/* Interactive elements */
 .container,
 .hero,
 .card,
 .project-card,
 .detail-section,
 .auth-card,
-.admin-section {
+.admin-section,
+.stat-card,
+.category-card,
+.faq-item {
     position: relative;
-    z-index: 10 !important;
+    z-index: 3;
 }
 
 /* Mobile menu should be above everything */
 .nav-links,
 .nav-overlay,
 .hamburger {
-    z-index: 99999 !important;
+    z-index: 9999 !important;
 }
 
 /* Ensure interactive elements work properly */
-input, textarea, select, button, a, .btn, .card {
+input, textarea, select, button, a, .btn {
     pointer-events: auto !important;
     position: relative;
-    z-index: 10;
-}
-    z-index: 10;
 }
 
 /* ============================================
