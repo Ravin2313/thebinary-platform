@@ -381,9 +381,6 @@ function initAnimations() {
     // Smooth scroll
     initSmoothScroll();
     
-    // Mouse follow (optional - can be heavy)
-    // initMouseFollow();
-    
     // Card tilt
     initCardTilt();
     
@@ -401,6 +398,20 @@ function initAnimations() {
         el.classList.add('fade-in');
         el.style.transitionDelay = `${index * 0.1}s`;
     });
+    
+    // Smooth hero text animation (no glitch)
+    const heroTitle = document.querySelector('.hero h1 .text-gradient');
+    if (heroTitle) {
+        // Add smooth fade-in with scale
+        heroTitle.style.opacity = '0';
+        heroTitle.style.transform = 'scale(0.9)';
+        
+        setTimeout(() => {
+            heroTitle.style.transition = 'opacity 1s ease-out, transform 1s ease-out';
+            heroTitle.style.opacity = '1';
+            heroTitle.style.transform = 'scale(1)';
+        }, 800);
+    }
 }
 
 // Initialize when DOM is ready
